@@ -1,46 +1,19 @@
-# To-Do List and Notes App
+# task_master
 
-People can use a to-do list app with notes to plan and manage their tasks and goals. They can make, change, and remove lists of things they have to do, and write notes for each item. The app helps them sort out their tasks, calm down, work better, be more creative, and remember more.
+A new Flutter project.
 
-Data is Stored locally on device storage with the help of sqflite flutter package, which executes queries using sql commands.
+## Getting Started
 
+This project is a starting point for a Flutter application.
 
-## Features
+A few resources to get you started if this is your first Flutter project:
 
-- Light/dark mode toggle
-- Separate groups for to-do lists
-- Works in offline mode
-- Cross platform
-- Percentage indicator to check overall progress
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-## Run Locally
-
-Clone the project
-
-```bash
-  git clone https://github.com/yuvraj0028/task_master.git
-```
-
-Go to the project directory
-
-```bash
-  cd task_master
-```
-
-Install dependencies
-
-```bash
-  flutter pub get
-```
-
-Run App
-
-```bash
-  flutter run
-```
-
-
-## Screenshots
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
 
 <img src="https://github.com/yuvraj0028/task_master/assets/96447724/d0076c98-59e5-4979-864e-2a2307e0961e" width="200" height="400" />
 <img src="https://github.com/yuvraj0028/task_master/assets/96447724/bb23cab2-aff1-45c1-9e50-515c1dcf8d22" width="200" height="400" /> 
