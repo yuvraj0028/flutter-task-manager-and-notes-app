@@ -1,23 +1,53 @@
-# task_master
 
-A new Flutter project.
+# To-Do List and Notes App
 
-## Getting Started
+People can use a to-do list app with notes to plan and manage their tasks and goals. They can make, change, and remove lists of things they have to do, and write notes for each item. The app helps them sort out their tasks, calm down, work better, be more creative, and remember more.
 
-This project is a starting point for a Flutter application.
+Data is Stored locally on device storage with the help of sqflite flutter package, which executes queries using sql commands.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Light/dark mode toggle
+- Separate groups for to-do lists
+- Works in offline mode
+- Cross platform
+- Notification of pending Tasks if "Date is Added"
+- Percentage indicator to check over all progress
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://github.com/yuvraj0028/task_master.git
+```
+
+Go to the project directory
+
+```bash
+  cd task_master
+```
+
+Install dependencies
+
+```bash
+  flutter pub get
+```
+
+Run App
+
+```bash
+  flutter run
+```
+
+
+## Screenshots
 
 <img src="https://github.com/yuvraj0028/task_master/assets/96447724/d0076c98-59e5-4979-864e-2a2307e0961e" width="200" height="400" />
-<img src="https://github.com/yuvraj0028/task_master/assets/96447724/bb23cab2-aff1-45c1-9e50-515c1dcf8d22" width="200" height="400" /> 
-<img src="https://github.com/yuvraj0028/task_master/assets/96447724/54bbb8ef-ad61-4f35-b631-06920680da98" width="200" height="400" />
+<img src="https://github.com/yuvraj0028/task_master/assets/96447724/bb23cab2-aff1-45c1-9e50-515c1dcf8d22" width="200" height="400" />
+<img src="https://github.com/yuvraj0028/task_master/assets/96447724/54bbb8ef-ad61-4f35-b631-06920680da98" width="200" height="400" /> 
 <img src="https://github.com/yuvraj0028/task_master/assets/96447724/083090bd-2fc6-44d4-a2e7-4c5343d85458" width="200" height="400" /> 
 <img src="https://github.com/yuvraj0028/task_master/assets/96447724/151a21ab-1538-44b3-b449-bd15e164217c" width="200" height="400" /> 
 <img src="https://github.com/yuvraj0028/task_master/assets/96447724/f07c2671-aef8-4112-9b05-822b6763a7de" width="200" height="400" />
