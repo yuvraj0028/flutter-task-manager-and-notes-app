@@ -12,7 +12,7 @@ Data is Stored locally on device storage with the help of sqflite flutter packag
 - Separate groups for to-do lists
 - Works in offline mode
 - Cross platform
-
+- Percentage indicator to check overall progress
 
 ## Run Locally
 
