@@ -39,6 +39,9 @@ class _NotesBuilderState extends State<NotesBuilder> {
               child: Center(
                 child: Column(
                   children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Text(
                       'No Notes!',
                       style: TextStyle(
@@ -46,8 +49,10 @@ class _NotesBuilderState extends State<NotesBuilder> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 15),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
                       width: mediaQuery.size.width * 0.7,
                       height: mediaQuery.size.width * 0.5,
                       child: Image.asset(

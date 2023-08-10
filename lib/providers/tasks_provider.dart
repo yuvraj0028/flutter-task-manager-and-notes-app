@@ -32,7 +32,6 @@ class TasksProvider extends ChangeNotifier {
     String title,
     String? desc,
     DateTime? startingDate,
-    DateTime? endingDate,
     String groupKey,
     DateTime date,
   ) {
@@ -41,7 +40,6 @@ class TasksProvider extends ChangeNotifier {
       title,
       desc,
       startingDate,
-      endingDate,
       imagePath: _taskGroup[groupKey]!,
     );
     _userTaskList.insert(
@@ -55,9 +53,6 @@ class TasksProvider extends ChangeNotifier {
       'desc': newUserTask.description ?? '',
       'stDate': newUserTask.startingDate != null
           ? newUserTask.startingDate.toString()
-          : '',
-      'edDate': newUserTask.endingDate != null
-          ? newUserTask.endingDate.toString()
           : '',
       'image': newUserTask.imagePath,
       'isDone': 0,
@@ -115,7 +110,6 @@ class TasksProvider extends ChangeNotifier {
             item['title'],
             item['desc'] == '' ? null : item['desc'],
             item['stDate'] == '' ? null : DateTime.tryParse(item['stDate']),
-            item['edDate'] == '' ? null : DateTime.tryParse(item['edDate']),
             imagePath: item['image'],
             isDone: item['isDone'] == 0 ? false : true,
           ),

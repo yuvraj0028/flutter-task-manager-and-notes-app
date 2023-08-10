@@ -11,8 +11,9 @@ class DBHelper {
       return db.execute('''
            CREATE TABLE USERTASK (
            id varchar(255),
-           title varchar(255),desc varchar(255),
-           stDate varchar(255),edDate varchar(255),
+           title varchar(255),
+           desc varchar(255),
+           stDate varchar(255),
            image varchar(255),
            isDone int);
            ''');

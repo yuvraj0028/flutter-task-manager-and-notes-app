@@ -32,14 +32,17 @@ class _TaskBuilderState extends State<TaskBuilder> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TasksProvider>(context);
-    final userList = Provider.of<TasksProvider>(context).userTaskList;
-    final groupList =
-        Provider.of<TasksProvider>(context).groupList(widget.filter!);
+    final userList = widget.filter! == 'NoGroup'
+        ? Provider.of<TasksProvider>(context).userTaskList
+        : Provider.of<TasksProvider>(context).groupList(widget.filter!);
     final mediaQuery = MediaQuery.of(context);
-    return (widget.filter == 'NoGroup' ? userList.isEmpty : groupList.isEmpty)
+    return userList.isEmpty
         ? Center(
             child: Column(
               children: [
+                const SizedBox(
+                  height: 20,
+                ),
                 Text(
                   'No Tasks!',
                   style: TextStyle(
@@ -47,8 +50,10 @@ class _TaskBuilderState extends State<TaskBuilder> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 15),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
                   width: mediaQuery.size.width * 0.7,
                   height: mediaQuery.size.width * 0.5,
                   child: Image.asset(
@@ -67,15 +72,12 @@ class _TaskBuilderState extends State<TaskBuilder> {
                 physics: const NeverScrollableScrollPhysics(),
                 primary: false,
                 shrinkWrap: true,
-                itemCount: widget.filter == 'NoGroup'
-                    ? userList.length
-                    : groupList.length,
+                itemCount: userList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return TaskTile(
                     user: user,
-                    userList: widget.filter == 'NoGroup' ? userList : groupList,
+                    userList: userList,
                     index: index,
-                    filter: widget.filter!,
                   );
                 },
               );
@@ -95,13 +97,11 @@ class TaskTile extends StatefulWidget {
     required this.user,
     required this.userList,
     required this.index,
-    required this.filter,
   });
 
   final TasksProvider user;
   final List<UserTask> userList;
   final int index;
-  final String filter;
 
   @override
   State<TaskTile> createState() => _TaskTileState();
@@ -120,11 +120,14 @@ class _TaskTileState extends State<TaskTile> {
   Widget build(BuildContext context) {
     return Dismissible(
       key: UniqueKey(),
-      direction: widget.filter == 'NoGroup'
-          ? DismissDirection.endToStart
-          : DismissDirection.none,
+      direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        widget.user.deleteTask(widget.index);
+        final tempIndex = Provider.of<TasksProvider>(context, listen: false)
+            .userTaskList
+            .indexWhere(
+              (element) => element.id == widget.userList[widget.index].id,
+            );
+        widget.user.deleteTask(tempIndex);
       },
       confirmDismiss: (direction) {
         return showDialog(
@@ -207,111 +210,98 @@ class _TaskTileState extends State<TaskTile> {
                   ),
                 ),
           trailing: Wrap(
+            direction: Axis.vertical,
+            alignment: WrapAlignment.center,
             children: [
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 3,
-                  ),
-                  widget.userList[widget.index].startingDate == null
-                      ? const Text('')
-                      : Text(
-                          DateFormat.MMMMd('en_US').format(
-                              widget.userList[widget.index].startingDate!),
-                        ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  widget.userList[widget.index].endingDate == null
-                      ? const Text('')
-                      : Text(
-                          DateFormat.MMMMd('en_US').format(
-                              widget.userList[widget.index].endingDate!),
-                        ),
-                ],
+              Text(
+                widget.userList[widget.index].startingDate == null
+                    ? ''
+                    : DateFormat.MMMMd('en_US')
+                        .format(widget.userList[widget.index].startingDate!),
               ),
-              if (widget.filter == 'NoGroup')
-                Consumer<TasksProvider>(
-                  builder: (context, user, _) {
-                    return Checkbox(
-                      value: widget.userList[widget.index].isDone,
-                      onChanged: (value) {
-                        final String id = widget.userList[widget.index].id
-                            .substring(
-                                20, widget.userList[widget.index].id.length);
-                        user.taskDone(
-                          widget.index,
-                          widget.userList[widget.index].isDone,
-                        );
-                        if (widget.userList[widget.index].startingDate
-                                .toString()
-                                .isNotEmpty &&
-                            widget.userList[widget.index].endingDate
+              Consumer<TasksProvider>(
+                builder: (context, user, _) {
+                  return Checkbox(
+                    value: widget.userList[widget.index].isDone,
+                    onChanged: (value) {
+                      final String id = widget.userList[widget.index].id
+                          .substring(
+                              20, widget.userList[widget.index].id.length);
+                      final indexTemp = user.userTaskList
+                          .indexOf(widget.userList[widget.index]);
+                      final check = user.userTaskList[indexTemp].isDone;
+                      user.taskDone(
+                        indexTemp,
+                        check,
+                      );
+                      if (widget.userList[widget.index].startingDate
+                          .toString()
+                          .isNotEmpty) {
+                        if (value == false) {
+                          notificationService.scheduleNotification(
+                              widget.userList[widget.index].title,
+                              "Task Pending",
+                              int.parse(id));
+                        } else {
+                          notificationService.stopNotification(int.parse(id));
+                        }
+                      }
+                    },
+                  );
+                },
+              ),
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Are you sure!'),
+                      content: const Text('This will delete the current task!'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(false);
+                          },
+                          child: const Text(
+                            'No',
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            final String id = widget.userList[widget.index].id
+                                .substring(20,
+                                    widget.userList[widget.index].id.length);
+                            final tempIndex = Provider.of<TasksProvider>(
+                                    context,
+                                    listen: false)
+                                .userTaskList
+                                .indexWhere(
+                                  (element) =>
+                                      element.id ==
+                                      widget.userList[widget.index].id,
+                                );
+                            Navigator.of(context).pop(true);
+                            widget.user.deleteTask(tempIndex);
+                            if (widget.userList[widget.index].startingDate
                                 .toString()
                                 .isNotEmpty) {
-                          if (value == false) {
-                            notificationService.scheduleNotification(
-                                widget.userList[widget.index].title,
-                                "Task Pending",
-                                int.parse(id));
-                          } else {
-                            notificationService.stopNotification(int.parse(id));
-                          }
-                        }
-                      },
-                    );
-                  },
-                ),
-              if (widget.filter == 'NoGroup')
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Are you sure!'),
-                        content:
-                            const Text('This will delete the current task!'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                            child: const Text(
-                              'No',
-                              style: TextStyle(color: Colors.grey),
-                            ),
+                              notificationService
+                                  .stopNotification(int.parse(id));
+                            }
+                          },
+                          child: const Text(
+                            'Yes',
                           ),
-                          TextButton(
-                            onPressed: () {
-                              final String id = widget.userList[widget.index].id
-                                  .substring(20,
-                                      widget.userList[widget.index].id.length);
-                              Navigator.of(context).pop(true);
-                              widget.user.deleteTask(widget.index);
-                              if (widget.userList[widget.index].startingDate
-                                      .toString()
-                                      .isNotEmpty &&
-                                  widget.userList[widget.index].endingDate
-                                      .toString()
-                                      .isNotEmpty) {
-                                notificationService
-                                    .stopNotification(int.parse(id));
-                              }
-                            },
-                            child: const Text(
-                              'Yes',
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.red,
-                  ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
                 ),
+              ),
             ],
           ),
         ),

@@ -18,8 +18,6 @@ class AddTask extends StatefulWidget {
 class _AddTaskState extends State<AddTask> {
   DateTime? startDate;
 
-  DateTime? endDate;
-
   final titleText = TextEditingController();
 
   final descText = TextEditingController();
@@ -73,61 +71,40 @@ class _AddTaskState extends State<AddTask> {
             customHeight(context),
             Padding(
               padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  dateButtonDecoration(
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 5,
-                          foregroundColor:
-                              startDate == null ? Colors.black45 : Colors.white,
-                          backgroundColor: startDate == null
-                              ? Colors.grey[300]
-                              : Theme.of(context).colorScheme.primary,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
+              child: dateButtonDecoration(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      foregroundColor:
+                          startDate == null ? Colors.black45 : Colors.white,
+                      backgroundColor: startDate == null
+                          ? Colors.grey[300]
+                          : Theme.of(context).colorScheme.primary,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
                         ),
-                        onPressed: () {
-                          _selectStartDate();
-                        },
-                        child: startDate == null
-                            ? const Text('Select Start Date')
-                            : Text(
-                                DateFormat('dd/MM/yy').format(startDate!),
-                              ),
                       ),
-                      context),
-                  dateButtonDecoration(
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          elevation: 5,
-                          foregroundColor:
-                              endDate == null ? Colors.black45 : Colors.white,
-                          backgroundColor: endDate == null
-                              ? Colors.grey[300]
-                              : Theme.of(context).colorScheme.primary,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
+                    ),
+                    onPressed: () {
+                      _selectStartDate();
+                    },
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: startDate == null
+                          ? Text(
+                              'Select Date',
+                              style: TextStyle(
+                                  fontSize: mediaQuery.textScaleFactor * 17),
+                            )
+                          : Text(
+                              DateFormat.MMMMd('en_US').format(startDate!),
+                              style: TextStyle(
+                                  fontSize: mediaQuery.textScaleFactor * 17),
                             ),
-                          ),
-                        ),
-                        onPressed: () {
-                          _selectEndDate();
-                        },
-                        child: endDate == null
-                            ? const Text('Select End Date')
-                            : Text(
-                                DateFormat('dd/MM/yy').format(endDate!),
-                              ),
-                      ),
-                      context),
-                ],
-              ),
+                    ),
+                  ),
+                  context),
             ),
             customHeight(context),
             Column(
@@ -290,9 +267,7 @@ class _AddTaskState extends State<AddTask> {
         child: FloatingActionButton(
           onPressed: () {
             _submitData(context);
-            if (titleText.text.trim().isNotEmpty &&
-                endDate != null &&
-                startDate != null) {
+            if (titleText.text.trim().isNotEmpty && startDate != null) {
               final String id =
                   _date.toString().substring(20, _date.toString().length);
 
@@ -344,8 +319,8 @@ class _AddTaskState extends State<AddTask> {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     return SizedBox(
-      width: size.width * 0.4,
-      height: isLandscape ? size.width * 0.06 : size.height * 0.06,
+      width: double.infinity,
+      height: isLandscape ? size.width * 0.06 : size.height * 0.075,
       child: button,
     );
   }
@@ -362,22 +337,6 @@ class _AddTaskState extends State<AddTask> {
       }
       setState(() {
         startDate = pickedDate;
-      });
-    });
-  }
-
-  void _selectEndDate() {
-    showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-    ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
-      setState(() {
-        endDate = pickedDate;
       });
     });
   }
@@ -409,7 +368,6 @@ class _AddTaskState extends State<AddTask> {
       taskTitle,
       taskDesc,
       startDate,
-      endDate,
       dropDownValue.toLowerCase(),
       _date,
     );

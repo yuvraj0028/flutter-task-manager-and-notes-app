@@ -195,7 +195,7 @@ class _UserAddScreenState extends State<UserAddScreen> {
                     child: selectedImage.compareTo(profileImages[index]) == 0
                         ? Icon(
                             Icons.done,
-                            size: mediaQuery.size.width * 0.08,
+                            size: mediaQuery.size.height * 0.08,
                           )
                         : null),
                 onTap: (index) {

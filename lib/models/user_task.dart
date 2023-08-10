@@ -3,7 +3,6 @@ class UserTask {
   final String title;
   String? description;
   DateTime? startingDate;
-  DateTime? endingDate;
   final String imagePath;
   bool isDone;
 
@@ -11,8 +10,7 @@ class UserTask {
     this.id,
     this.title,
     this.description,
-    this.startingDate,
-    this.endingDate, {
+    this.startingDate, {
     this.imagePath = 'assets/images/self.png',
     this.isDone = false,
   });
