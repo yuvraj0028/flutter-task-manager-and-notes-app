@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class LightTheme {
   static ThemeData lightThemeData = ThemeData(
+    useMaterial3: false,
     appBarTheme: const AppBarTheme(
       elevation: 1,
     ),
@@ -30,6 +31,7 @@ class LightTheme {
 
 class DarkTheme {
   static ThemeData darkThemeData = ThemeData(
+    useMaterial3: false,
     appBarTheme: const AppBarTheme(
       elevation: 1,
     ),
